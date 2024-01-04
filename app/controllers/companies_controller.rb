@@ -32,17 +32,23 @@ class CompaniesController < ApplicationController
     end
 
     def create
-        company = Company.create(company_params)
-        if profile.save
-            render json: {
-                message: "Company Created Successfully",
-                company: company
-            }, status: :created
+        if current_user.role = 'company'
+            company = Company.create(company_params)
+            if company.save
+                render json: {
+                    message: "Company Created Successfully",
+                    company: company
+                }, status: :created
+            else
+                render json: {
+                    message: "Company Cannot be Created",
+                    company: company.errors.full_messages
+                }, status: 422
+            end
         else
             render json: {
-                message: "Company Cannot be Created",
-                company: company.errors.full_messages
-            }, status: 422
+                message: "Dude Your role should be Company"
+            },status: 401
         end
     end
 
@@ -70,7 +76,7 @@ class CompaniesController < ApplicationController
     end
 
     def company_params
-        params.permit(:name,:type,:size, :website,:founded,:headquarters,:specialities).merge(user_id: current_user.id)
+        params.permit(:name,:company_type,:size, :website,:founded,:headquarters,:specialities).merge(user_id: current_user.id)
     end
 
     def current_log

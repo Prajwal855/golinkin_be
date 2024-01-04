@@ -75,7 +75,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_050544) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
-    t.string "type"
+    t.string "company_type"
     t.string "size"
     t.string "website"
     t.string "founded"

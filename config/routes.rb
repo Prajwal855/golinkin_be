@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
+    # Custom routes for news
+    get '/top_headlines', to: 'news#top_headlines'
+    get '/all_articles', to: 'news#all_articles'
+    get '/sources', to: 'news#sources'
+
   # Defines the root path route ("/")
   # root "articles#index"
   # Custom routes for questions
