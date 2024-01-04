@@ -1,0 +1,2 @@
+class Termsandcondition < ApplicationRecord
+end
