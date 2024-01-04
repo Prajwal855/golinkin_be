@@ -22,4 +22,11 @@ Rails.application.routes.draw do
    # SMS verification endpoint
    post 'users/sms_confirmation', to: 'accounts#sms_confirm'
    resources :profiles,:choices,:questions,:termsandconditions, :companies
+  
+  get 'get_roles', to: 'users#get_roles'
+
+  resources :companies
+  resources :jobs
+
+   
 end

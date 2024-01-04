@@ -5,13 +5,12 @@ class CompaniesController < ApplicationController
         companies = Company.all
         if companies.empty?
             render json: {
-                message: "Company Not Found",
-                companies: []
+                message: "Company Not Found"
             }, status: :not_found
         else
             render json: {
                 message: "Company Found",
-                companies: DocumentSerializer.new(companies)
+                companies: [companies]
             }, status: :ok
         end        
     end
@@ -25,7 +24,7 @@ class CompaniesController < ApplicationController
             },status: :ok
         else
             render json: {
-                message: "Company Not Found",
+                message: "Company Not Found for given Id",
                 company: []
             }, status: :not_found
         end
@@ -64,6 +63,24 @@ class CompaniesController < ApplicationController
                 message: "Company Unable to Upadte",
                 error: company.errors.full_messages
             }, status: 422
+        end
+    end
+
+
+    def destroy
+        company = set_company
+        if company.present?
+            company.delete
+            render json:
+            {
+                message: "Specified company Id deleted successfully...",
+                company: company
+            }, status: 200
+        else
+            render json:
+            {
+                message: "Sorry!,specified company Id failed to delete!!!"
+            }, status: 400
         end
     end
 

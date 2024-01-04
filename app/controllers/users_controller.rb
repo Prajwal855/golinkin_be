@@ -1,4 +1,5 @@
 class UsersController < ActionController::Base
+    ROLES = { company: "company", jobseeker: "jobseeker", freelancer: "freelancer" }
     def index
         users = User.all
         if users.empty?
@@ -73,6 +74,14 @@ class UsersController < ActionController::Base
             }, status: 422
         end
     end
+
+    def get_roles
+        render json: {
+            message: "Roles Found",
+            roles: ROLES
+        }, status: :ok
+    end
+
 
     private
     def user_params
