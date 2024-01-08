@@ -1,6 +1,5 @@
 class NewsController < ApplicationController
  
-    
     def top_headlines
       news_service = NewsService.new
       @articles = news_service.get_top_headlines(news_params.to_h)

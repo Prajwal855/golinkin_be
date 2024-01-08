@@ -1,7 +1,6 @@
 class JobsController < ApplicationController
     before_action :current_log
 
-
     def index
         job = Job.all
         if job.any?
@@ -54,7 +53,6 @@ class JobsController < ApplicationController
     end
 
 
-
     def update
         job = set_jobs
         if job.update(job_params)
@@ -71,8 +69,7 @@ class JobsController < ApplicationController
         end
     end
 
-
-
+    
     def destroy
         job = set_jobs
         if job.present?

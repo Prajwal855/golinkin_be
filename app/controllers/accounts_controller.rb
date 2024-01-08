@@ -29,7 +29,6 @@ class AccountsController < ApplicationController
     end
   
     private
-  
     def sms_verification_params
       params.permit(:pin)
     end

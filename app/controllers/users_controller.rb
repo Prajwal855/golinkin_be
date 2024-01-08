@@ -82,7 +82,6 @@ class UsersController < ActionController::Base
         }, status: :ok
     end
 
-
     private
     def user_params
         params.require(:user).permit(:name, :email, :password, :role,:token)
