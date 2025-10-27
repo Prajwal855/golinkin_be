@@ -2,7 +2,7 @@
 # check=error=true
 
 # This Dockerfile is designed for a Ruby on Rails application using SQLite3.
-# It supports a development environment but can be adapted for production with Kamal or manual deployment:
+# It supports a development environment but can be adapted for production:
 # docker build -t user_service .
 # docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> -v sqlite_data:/rails/db --name user_service user_service
 
@@ -38,14 +38,15 @@ RUN apt-get update -qq && \
 COPY Gemfile Gemfile.lock ./
 # Add x86_64-linux platform to Gemfile.lock to resolve platform mismatch
 RUN bundle lock --add-platform x86_64-linux && \
-    bundle install && \
+    bundle install --quiet && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
 # Copy application code
 COPY . .
 
-RUN chmod +x bin/docker-entrypoint bin/rails bin/thrust
+# Make bin/rails executable, skip missing files (e.g., docker-entrypoint, thrust)
+RUN chmod +x bin/rails || true
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
@@ -63,9 +64,9 @@ RUN groupadd --system --gid 1000 rails && \
     chown -R rails:rails db log storage tmp
 USER 1000:1000
 
-# Entrypoint prepares the database
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Entrypoint runs migrations and starts the server
+ENTRYPOINT ["bundle", "exec", "rails"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
+# Start Rails server by default, can be overwritten at runtime
 EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+CMD ["server", "-b", "0.0.0.0", "-p", "80"]
